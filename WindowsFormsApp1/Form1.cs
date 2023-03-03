@@ -32,18 +32,19 @@ namespace GestionBancariaAppNS
         public int RealizarReintegro(double cantidad) 
         {
             if (cantidad <= 0)
-                return ERR_CANTIDAD_NO_VALIDA;
+                throw new ArgumentOutOfRangeException("La catidad indicada no es valida");
             if (saldo < cantidad)
-                return ERR_SALDO_INSUFICIENTE;
-            saldo += cantidad;
+                throw new ArgumentOutOfRangeException("Saldo insuficiente");
+            saldo -= cantidad;
             return 0;
         }
 
-        public int RealizarIngreso(double cantidad) {
-            if (cantidad > 0)
-                return ERR_CANTIDAD_NO_VALIDA;
-            saldo -= cantidad;
-            return 0;
+        public double RealizarIngreso(double cantidad) {
+            if (cantidad < 0)
+                throw new ArgumentOutOfRangeException("La catidad indicada no es valida");
+
+            saldo += cantidad;
+            return saldo;
         }
 
         private void btOperar_Click(object sender, EventArgs e)
@@ -68,6 +69,11 @@ namespace GestionBancariaAppNS
                     MessageBox.Show("Transacción realizada.");
             }
            txtSaldo.Text = ObtenerSaldo().ToString();
+        }
+
+        private void GestionBancariaApp_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
