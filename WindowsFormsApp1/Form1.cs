@@ -40,7 +40,7 @@ namespace GestionBancariaAppNS
         }
 
         public double RealizarIngreso(double cantidad) {
-            if (cantidad < 0)
+            if (cantidad <= 0)
                 throw new ArgumentOutOfRangeException("La catidad indicada no es valida");
 
             saldo += cantidad;
@@ -71,19 +71,21 @@ namespace GestionBancariaAppNS
                 }
 
             }
-            else //Ezequiel Matias Maggio 2023 alu-2771
+            if (rbIngreso.Checked) //Ezequiel Matias Maggio 2023 alu-2771
             {
                 try
                 {
                     RealizarIngreso(cantidad);
                     MessageBox.Show("Transaccion realizada");
+
                 }
-                catch(Exception error)
+                catch(Exception error2)
                 {
-                    if (error.Message.Contains(ERR_CANTIDAD_NO_VALIDA))
+                    if (error2.Message.Contains(ERR_CANTIDAD_NO_VALIDA))
                     {
                         MessageBox.Show("Cantidad no valida, solo admitido cantidades positivas");
-                    }//Ezequiel Matias Maggio 2023 alu-2771
+                    }
+                    //Ezequiel Matias Maggio 2023 alu-2771
                 }
             }
            txtSaldo.Text = ObtenerSaldo().ToString();
