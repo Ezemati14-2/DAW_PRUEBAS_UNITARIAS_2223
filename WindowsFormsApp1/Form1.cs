@@ -13,8 +13,8 @@ namespace GestionBancariaAppNS
     public partial class GestionBancariaApp : Form
     {
         private double saldo;  
-        const int ERR_CANTIDAD_NO_VALIDA = 1;
-        const int ERR_SALDO_INSUFICIENTE = 2;
+        public const string ERR_CANTIDAD_NO_VALIDA = "Cantidad no valida";
+        public const string ERR_SALDO_INSUFICIENTE = "Saldo Insuficiente";
 
         public GestionBancariaApp(double saldo = 0)
         {
@@ -32,9 +32,9 @@ namespace GestionBancariaAppNS
         public int RealizarReintegro(double cantidad) 
         {
             if (cantidad <= 0)
-                throw new ArgumentOutOfRangeException("La catidad indicada no es valida");
+                throw new ArgumentOutOfRangeException(ERR_CANTIDAD_NO_VALIDA);
             if (saldo < cantidad)
-                throw new ArgumentOutOfRangeException("Saldo insuficiente");
+                throw new ArgumentOutOfRangeException(ERR_SALDO_INSUFICIENTE);
             saldo -= cantidad;
             return 0;
         }
@@ -49,24 +49,42 @@ namespace GestionBancariaAppNS
 
         private void btOperar_Click(object sender, EventArgs e)
         {
-            double cantidad = Convert.ToDouble(txtCantidad.Text); // Cogemos la cantidad del TextBox y la pasamos a número
+            double cantidad = Convert.ToDouble(txtCantidad.Text);
             if (rbReintegro.Checked)
-            {
-                int respuesta = RealizarReintegro(cantidad);
-                if (respuesta == ERR_SALDO_INSUFICIENTE)
-                    MessageBox.Show("No se ha podido realizar la operación (¿Saldo insuficiente?)");
-                else
-                if (respuesta == ERR_CANTIDAD_NO_VALIDA)
-                    MessageBox.Show("Cantidad no válida, sólo se admiten cantidades positivas.");
-                else
-                    MessageBox.Show("Transacción realizada.");
+            {   //Ezequiel Matias Maggio 2023 alu-2771
+                try
+                {
+                    RealizarReintegro(cantidad);
+                    MessageBox.Show("Transaccion realizada");
+                }
+                catch (Exception error) {
+                    if(error.Message.Contains(ERR_SALDO_INSUFICIENTE))
+                    {
+                        MessageBox.Show("No se ha podido realizar la operacion (Saldo insuficiente?)");
+                    }
+                    else
+                        if (error.Message.Contains(ERR_CANTIDAD_NO_VALIDA))
+                    {
+                        MessageBox.Show("Cantidad no valida, solo admitido cantidades positivas");
+                    }
+                    //Ezequiel Matias Maggio 2023 alu-2771
+                }
 
             }
-            else {
-                if (RealizarIngreso(cantidad) == ERR_CANTIDAD_NO_VALIDA)
-                    MessageBox.Show("Cantidad no válida, sólo se admiten cantidades positivas.");
-                else
-                    MessageBox.Show("Transacción realizada.");
+            else //Ezequiel Matias Maggio 2023 alu-2771
+            {
+                try
+                {
+                    RealizarIngreso(cantidad);
+                    MessageBox.Show("Transaccion realizada");
+                }
+                catch(Exception error)
+                {
+                    if (error.Message.Contains(ERR_CANTIDAD_NO_VALIDA))
+                    {
+                        MessageBox.Show("Cantidad no valida, solo admitido cantidades positivas");
+                    }//Ezequiel Matias Maggio 2023 alu-2771
+                }
             }
            txtSaldo.Text = ObtenerSaldo().ToString();
         }
