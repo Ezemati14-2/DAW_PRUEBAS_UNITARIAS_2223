@@ -49,41 +49,47 @@ namespace GestionBancaiaTest
         //    Assert.AreEqual(saldoEsperado, miAppEMM2771.RealizarIngreso(ingreso), "Se produbjo un error al realizar eL INGRESO, saldo" + "incorrecto.");
         //}
 
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void ValidarReintrgroCantidadaNoValida()
+        {
+            //Ezequiel Matias Maggio 2023 alu-2771
+            double saldoInicial = 1000;
+            double reintegro = -250;
+            double saldoEsperado = saldoInicial - reintegro;
+            //Ezequiel Matias Maggio 2023 alu-2771
 
-        //public void ValidarReintrgroCantidadaNoValida()
+            GestionBancariaApp miAppEMM2771 = new GestionBancariaApp(saldoInicial);
+            try
+            {
+                miAppEMM2771.RealizarReintegro(reintegro);
+            }
+            catch (ArgumentOutOfRangeException exception)
+            {
+                StringAssert.Contains(exception.Message, GestionBancariaApp.ERR_CANTIDAD_NO_VALIDA);
+            }
+            
+
+            miAppEMM2771.RealizarReintegro(reintegro);
+            //Assert.AreEqual(saldoEsperado, miAppEMM2771.RealizarIngreso(ingreso), "Se produbjo un error al realizar eL INGRESO, saldo" + "incorrecto.");
+        }
+
+        
+        //public void ValidarIngresoCantidadaNoValida()
         //{
         //    //Ezequiel Matias Maggio 2023 alu-2771
         //    //preparacion del caso de prueba
-        //    double saldoInicial = -1;
-        //    double reintegro = 10;
-        //    double saldoEsperado = saldoInicial - reintegro;
+        //    double saldoInicial = 0;
+        //    double ingreso = -10;
+        //    double saldoEsperado = saldoInicial + ingreso;
 
 
         //    GestionBancariaApp miAppEMM2771 = new GestionBancariaApp(saldoInicial);
         //    //Ezequiel Matias Maggio 2023 alu-2771
         //    //metodo a probar
 
-        //    miAppEMM2771.RealizarReintegro(reintegro);
+        //    miAppEMM2771.RealizarIngreso(ingreso);
         //    //Assert.AreEqual(saldoEsperado, miAppEMM2771.RealizarIngreso(ingreso), "Se produbjo un error al realizar eL INGRESO, saldo" + "incorrecto.");
         //}
-
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ValidarIngresoCantidadaNoValida()
-        {
-            //Ezequiel Matias Maggio 2023 alu-2771
-            //preparacion del caso de prueba
-            double saldoInicial = 0;
-            double ingreso = -10;
-            double saldoEsperado = saldoInicial + ingreso;
-
-
-            GestionBancariaApp miAppEMM2771 = new GestionBancariaApp(saldoInicial);
-            //Ezequiel Matias Maggio 2023 alu-2771
-            //metodo a probar
-
-            miAppEMM2771.RealizarIngreso(ingreso);
-            //Assert.AreEqual(saldoEsperado, miAppEMM2771.RealizarIngreso(ingreso), "Se produbjo un error al realizar eL INGRESO, saldo" + "incorrecto.");
-        }
         public void TestMethod1()
         {
             //Ezequiel Matias Maggio 2023 alu-2771
